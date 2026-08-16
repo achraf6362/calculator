@@ -4,6 +4,7 @@ const display = document.querySelector('#display');
 const equal = document.querySelector('#equal');
 const clear = document.querySelector('#clear');
 const del = document.querySelector('#del');
+const pn = document.querySelector('#pn');
 
 const add = (a, b) => a + b;
 const subtract = (a, b) => a - b;
@@ -37,40 +38,53 @@ numbers.forEach(number => {
     if (active === 'a') {
       newCalc = 'no';
       if (e.target.value === '.' && aNum.includes('.')) return;
-      aNum += e.target.value;
-      display.textContent += e.target.value;
+
+      if (aNum === '0' && e.target.value === '0') return;
+
+      if (aNum === '0' && e.target.value !== '.') {
+        aNum = e.target.value;
+      } else if (aNum === '' && e.target.value === '.') {
+        aNum = '0.';
+      } else {
+        aNum += e.target.value;
+      }
+      display.textContent = aNum;
+      
     } else if (active === 'b') {
         if (e.target.value === '.' && bNum.includes('.')) return;
         bNum += e.target.value;
         display.textContent += e.target.value;
         oActive = 'no';
     }
-
-    
   });
 });
 
 operators.forEach(operator => {
   operator.addEventListener('click', (e) => {
-    if (aNum === '' || aNum === 'Error') return;
+    if (aNum === 'Error') return;
 
     newCalc = 'no';
 
-    if (active === 'a' && oActive === 'yes') {
+    if (active === 'a' && oActive === 'yes' && aNum === '') {
+      aNum = '0';
       active = 'b';
       o = e.target.value;
       display.textContent += e.target.textContent;
+    } else if (active === 'a' && oActive === 'yes') {
+        active = 'b';
+        o = e.target.value;
+        display.textContent += e.target.textContent;
     } else if (active === 'b' && o !== '' && oActive === 'yes') {
-      display.textContent = display.textContent.slice(0, -1) + e.target.textContent;
-      o = e.target.value;
+        display.textContent = display.textContent.slice(0, -1) + e.target.textContent;
+        o = e.target.value;
     } else if (active === 'b' && bNum !== '') {
-      let result = Math.round(operate(+aNum, +bNum, o) * 100000000000) / 100000000000;
-      if (!isFinite(result)) result = 'Error';
-      o = e.target.value;
-      display.textContent = result + e.target.textContent;
-      aNum = String(result);
-      bNum = '';
-      oActive = 'yes';
+        let result = Math.round(operate(+aNum, +bNum, o) * 100000000000) / 100000000000;
+        if (!isFinite(result)) result = 'Error';
+        o = e.target.value;
+        display.textContent = result + e.target.textContent;
+        aNum = String(result);
+        bNum = '';
+        oActive = 'yes';
     }
   });
 });
@@ -90,7 +104,7 @@ equal.addEventListener('click', () => {
 });
 
 clear.addEventListener('click', () => {
-  display.textContent = '';
+  display.textContent = '0';
   aNum = '';
   bNum = '';
   active = 'a';
@@ -100,6 +114,8 @@ clear.addEventListener('click', () => {
 });
 
 del.addEventListener('click', () => {
+  if (display.textContent === '') display.textContent = '0';
+
   if (bNum !== '') {
     bNum = bNum.slice(0, -1);
     display.textContent = display.textContent.slice(0, -1);
@@ -124,6 +140,18 @@ window.addEventListener('keydown', (e) => {
   } else {
     const btn = document.querySelector(`button[value="${e.key}"]`);
     if (btn) btn.click();
+  }
+});
+
+pn.addEventListener('click', () => {
+  if (aNum === '' || aNum === '0' || aNum === 'Error') return;
+
+  if (active === 'a') {
+    aNum = aNum.startsWith('-') ? aNum.slice(1) : '-' + aNum;
+    display.textContent = aNum;
+  } else if (active === 'b' && bNum !== '') {
+    bNum = bNum.startsWith('-') ? bNum.slice(1) : '-' + bNum;
+    display.textContent = aNum + o + bNum;
   }
 });
 
