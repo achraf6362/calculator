@@ -113,3 +113,22 @@ del.addEventListener('click', () => {
     display.textContent = display.textContent.slice(0, -1);
   }
 });
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === '=') {
+    equal.click();
+  } else if (e.key === 'Backspace') {
+    del.click();
+  } else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') {
+    clear.click();
+  } else {
+    const btn = document.querySelector(`button[value="${e.key}"]`);
+    if (btn) btn.click();
+  }
+});
+
+document.querySelectorAll('button').forEach(button => {
+  button.addEventListener('focus', () => {
+    button.blur();
+  })
+});
