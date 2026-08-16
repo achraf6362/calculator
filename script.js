@@ -8,7 +8,7 @@ const del = document.querySelector('#del');
 const add = (a, b) => a + b;
 const subtract = (a, b) => a - b;
 const multiply = (a, b) => a * b;
-const divide = (a, b) => b === 0 ? 'Error' : a / b;
+const divide = (a, b) => a / b;
 
 let aNum = '';
 let bNum = '';
@@ -36,10 +36,11 @@ numbers.forEach(number => {
 
     if (active === 'a') {
       newCalc = 'no';
+      if (e.target.value === '.' && aNum.includes('.')) return;
       aNum += e.target.value;
       display.textContent += e.target.value;
-      // if (aNum.includes('.')) return;
     } else if (active === 'b') {
+        if (e.target.value === '.' && bNum.includes('.')) return;
         bNum += e.target.value;
         display.textContent += e.target.value;
         oActive = 'no';
@@ -58,15 +59,16 @@ operators.forEach(operator => {
     if (active === 'a' && oActive === 'yes') {
       active = 'b';
       o = e.target.value;
-      display.textContent += e.target.value;
+      display.textContent += e.target.textContent;
     } else if (active === 'b' && o !== '' && oActive === 'yes') {
-      display.textContent = display.textContent.slice(0, -1) + e.target.value;
+      display.textContent = display.textContent.slice(0, -1) + e.target.textContent;
       o = e.target.value;
     } else if (active === 'b' && bNum !== '') {
-      let result = operate(+aNum, +bNum, o);
+      let result = Math.round(operate(+aNum, +bNum, o) * 100000000000) / 100000000000;
+      if (!isFinite(result)) result = 'Error';
       o = e.target.value;
-      display.textContent = result + o;
-      aNum = result;
+      display.textContent = result + e.target.textContent;
+      aNum = String(result);
       bNum = '';
       oActive = 'yes';
     }
@@ -75,9 +77,10 @@ operators.forEach(operator => {
 
 equal.addEventListener('click', () => {
   if (bNum !== '') {
-    let result = operate(+aNum, +bNum, o);
+    let result = Math.round(operate(+aNum, +bNum, o) * 100000000000) / 100000000000;
+    if (!isFinite(result)) result = 'Error';
     display.textContent = result;
-    aNum = result;
+    aNum = String(result);
     bNum = '';
     active = 'a';
     o = '';
@@ -96,152 +99,17 @@ clear.addEventListener('click', () => {
   newCalc = 'yes';
 });
 
-
-/* del.addEventListener('click', () => {
-  if (active === 'a') {
+del.addEventListener('click', () => {
+  if (bNum !== '') {
+    bNum = bNum.slice(0, -1);
+    display.textContent = display.textContent.slice(0, -1);
+  } else if (o !== '') {
+    o = '';
+    active = 'a';
+    oActive = 'yes';
+    display.textContent = display.textContent.slice(0, -1);
+  } else if (active === 'a') {
     aNum = aNum.slice(0, -1);
     display.textContent = display.textContent.slice(0, -1);
   }
-}) */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* const display = document.querySelector('#display');
-const equal = document.querySelector('#equal');
-const del = document.querySelector('#del');
-const numbers = document.querySelectorAll('.number');
-const operators = document.querySelectorAll('.operator');
-
-const add = (a, b) => a + b;
-const subtract = (a, b) => a - b;
-const multiply = (a, b) => a * b;
-const divide = (a, b) => a / b;
-
-function operate(a, b, operator) {
-  if (operator === '+') {
-    display.textContent = add(a, b);
-    num1 = add(a, b);
-    num2 = '';
-  } else if (operator === '-') {
-    display.textContent = subtract(a, b);
-    num1 = subtract(a, b);
-    num2 = '';
-  } else if (operator === '*') {
-    display.textContent = multiply(a, b);
-    num1 = multiply(a, b);
-    num2 = '';
-  } else if (operator === '/') {
-    display.textContent = divide(a, b);
-    num1 = divide(a, b);
-    num2 = '';  
-  }
-}
-
-let num1 = '';
-let num2 = '';
-let o = '';
-let c = 'a';
-let p = 'n'
-
-numbers.forEach(number => {
-  number.addEventListener('click', (e) => {
-    if (p === 'y') {
-      display.textContent = '';
-      num1 = '';
-      p = 'n';
-    }
-
-    if (c === 'a') {
-      num1 += e.target.value;
-    } else {
-      num2 += e.target.value;
-    }
-
-    display.textContent += e.target.textContent;
-  });
 });
-
-operators.forEach(operator => {
-  operator.addEventListener('click', (e) => {
-    
-
-    if (c === 'a') {
-      display.textContent += e.target.textContent;
-      o = e.target.value;
-      c = 'b';
-    } else {
-      operate(+num1, +num2, o);
-      display.textContent += e.target.textContent;
-      o = e.target.value;
-    }
-  })
-})
-
-equal.addEventListener('click', () => {
-  operate(+num1, +num2, o);
-  c = 'a';
-  display.textContent = num1;
-  p = 'y';
-});
-
-del.addEventListener('click', () => {
-  if (c === 'a') {
-    display.textContent = display.textContent.slice(0, -1);
-    num1 = num1.slice(0, -1);
-  } else {
-    display.textContent = display.textContent.slice(0, -1);;
-    num2 = num2.slice(0, -1);
-  }
-}) */
