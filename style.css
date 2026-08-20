@@ -66,6 +66,10 @@ section {
 
   button {
     background-color: rgb(255, 211, 67);
+
+    &:hover {
+      background-color: rgb(248, 200, 45);;
+    }
   }
 }
 
@@ -76,6 +80,10 @@ section {
 
   button {
     background-color: rgb(231, 231, 231);
+
+    &:hover {
+      background-color: rgb(224, 224, 224);
+    }
   }
 }
 
@@ -87,4 +95,9 @@ button {
   border-radius: 4px;
   color: black;
   background-color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(243, 243, 243);
+  }
 }
