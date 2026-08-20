@@ -13,10 +13,10 @@ const divide = (a, b) => a / b;
 
 let aNum = '';
 let bNum = '';
-let active = 'a';
+let isANumActive = true;
 let o = '';
-let oActive = 'yes';
-let newCalc = 'yes';
+let isOActive = true;
+let isNewCalc = true;
 let lastBNum = '';
 let LastO = '';
 
@@ -29,16 +29,16 @@ function operate(a, b, operator) {
 
 numbers.forEach(number => {
   number.addEventListener('click', (e) => {
-    if (newCalc === 'yes' && aNum !== '') {
+    if (isNewCalc && aNum !== '') {
       display.textContent = '';
       aNum = '';
       bNum = '';
-      active = 'a';
-      newCalc = 'no';
+      isANumActive = true;
+      isNewCalc = false;
     }
 
-    if (active === 'a') {
-      newCalc = 'no';
+    if (isANumActive) {
+      isNewCalc = false;
 
       if (e.target.value === '.' && aNum.includes('.')) return;
 
@@ -54,7 +54,7 @@ numbers.forEach(number => {
 
       display.textContent = aNum;
       
-    } else if (active === 'b') {
+    } else if (!isANumActive) {
         if (e.target.value === '.' && bNum.includes('.')) return;
 
         if (bNum === '0' && e.target.value === '0') return;
@@ -66,7 +66,7 @@ numbers.forEach(number => {
 
         bNum += e.target.value;
         display.textContent += e.target.value;
-        oActive = 'no';
+        isOActive = false;
     }
   });
 });
@@ -75,28 +75,28 @@ operators.forEach(operator => {
   operator.addEventListener('click', (e) => {
     if (aNum === 'Error') return;
 
-    newCalc = 'no';
+    isNewCalc = false;
 
-    if (active === 'a' && oActive === 'yes' && aNum === '') {
+    if (isANumActive && isOActive && aNum === '') {
       aNum = '0';
-      active = 'b';
+      isANumActive = false;
       o = e.target.value;
       display.textContent += e.target.textContent;
-    } else if (active === 'a' && oActive === 'yes') {
-        active = 'b';
+    } else if (isANumActive && isOActive) {
+        isANumActive = false;
         o = e.target.value;
         display.textContent += e.target.textContent;
-    } else if (active === 'b' && o !== '' && oActive === 'yes') {
+    } else if (!isANumActive && o !== '' && isOActive) {
         display.textContent = display.textContent.slice(0, -1) + e.target.textContent;
         o = e.target.value;
-    } else if (active === 'b' && bNum !== '') {
+    } else if (!isANumActive && bNum !== '') {
         let result = Math.round(operate(+aNum, +bNum, o) * 10000000000) / 10000000000;
         if (!isFinite(result)) result = 'Error';
         o = e.target.value;
         display.textContent = result + e.target.textContent;
         aNum = String(result);
         bNum = '';
-        oActive = 'yes';
+        isOActive = true;
     }
   });
 });
@@ -111,10 +111,10 @@ equal.addEventListener('click', () => {
     lastBNum = bNum;
     LastO = o;
     bNum = '';
-    active = 'a';
+    isANumActive = true;
     o = '';
-    oActive = 'yes';
-    newCalc = 'yes';
+    isOActive = true;
+    isNewCalc = true;
   }
 
   else if (lastBNum !== '' && LastO !== '' && aNum !== '' && aNum !== 'Error') {
@@ -122,7 +122,7 @@ equal.addEventListener('click', () => {
     if (!isFinite(result)) result = 'Error';
     display.textContent = result;
     aNum = String(result);
-    newCalc = 'yes';
+    isNewCalc = true;
   }
 });
 
@@ -130,10 +130,10 @@ clear.addEventListener('click', () => {
   display.textContent = '0';
   aNum = '';
   bNum = '';
-  active = 'a';
+  isANumActive = true;
   o = '';
-  oActive = 'yes';
-  newCalc = 'yes';
+  isOActive = true;
+  isNewCalc = true;
 });
 
 del.addEventListener('click', () => {
@@ -143,10 +143,10 @@ del.addEventListener('click', () => {
     display.textContent = display.textContent.slice(0, -1);
   } else if (o !== '') {
     o = '';
-    active = 'a';
-    oActive = 'yes';
+    isANumActive = true;
+    isOActive = true;
     display.textContent = display.textContent.slice(0, -1);
-  } else if (active === 'a') {
+  } else if (isANumActive) {
     aNum = aNum.slice(0, -1);
     display.textContent = display.textContent.slice(0, -1);
     if (display.textContent === '') display.textContent = '0';
@@ -169,10 +169,10 @@ window.addEventListener('keydown', (e) => {
 pn.addEventListener('click', () => {
   if (aNum === '' || aNum === '0' || aNum === 'Error') return;
 
-  if (active === 'a') {
+  if (isANumActive) {
     aNum = aNum.startsWith('-') ? aNum.slice(1) : '-' + aNum;
     display.textContent = aNum;
-  } else if (active === 'b' && bNum !== '') {
+  } else if (!isANumActive && bNum !== '') {
     bNum = bNum.startsWith('-') ? bNum.slice(1) : '-' + bNum;
     display.textContent = aNum + o + bNum;
   }
