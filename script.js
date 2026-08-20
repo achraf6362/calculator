@@ -17,6 +17,8 @@ let active = 'a';
 let o = '';
 let oActive = 'yes';
 let newCalc = 'yes';
+let lastBNum = '';
+let LastO = '';
 
 function operate(a, b, operator) {
   if (operator === '+') return add(a, b, operator);
@@ -37,6 +39,7 @@ numbers.forEach(number => {
 
     if (active === 'a') {
       newCalc = 'no';
+
       if (e.target.value === '.' && aNum.includes('.')) return;
 
       if (aNum === '0' && e.target.value === '0') return;
@@ -48,10 +51,19 @@ numbers.forEach(number => {
       } else {
         aNum += e.target.value;
       }
+
       display.textContent = aNum;
       
     } else if (active === 'b') {
         if (e.target.value === '.' && bNum.includes('.')) return;
+
+        if (bNum === '0' && e.target.value === '0') return;
+
+        if (bNum === '' && e.target.value === '.') {
+          bNum = '0';
+          display.textContent += bNum;
+        }
+
         bNum += e.target.value;
         display.textContent += e.target.value;
         oActive = 'no';
@@ -90,15 +102,26 @@ operators.forEach(operator => {
 });
 
 equal.addEventListener('click', () => {
+
   if (bNum !== '') {
     let result = Math.round(operate(+aNum, +bNum, o) * 100000000000) / 100000000000;
     if (!isFinite(result)) result = 'Error';
     display.textContent = result;
     aNum = String(result);
+    lastBNum = bNum;
+    LastO = o;
     bNum = '';
     active = 'a';
     o = '';
     oActive = 'yes';
+    newCalc = 'yes';
+  }
+
+  else if (lastBNum !== '' && LastO !== '' && aNum !== '' && aNum !== 'Error') {
+    let result = Math.round(operate(+aNum, +lastBNum, LastO) * 100000000000) / 100000000000;
+    if (!isFinite(result)) result = 'Error';
+    display.textContent = result;
+    aNum = String(result);
     newCalc = 'yes';
   }
 });
@@ -114,7 +137,6 @@ clear.addEventListener('click', () => {
 });
 
 del.addEventListener('click', () => {
-  if (display.textContent === '') display.textContent = '0';
 
   if (bNum !== '') {
     bNum = bNum.slice(0, -1);
@@ -127,6 +149,7 @@ del.addEventListener('click', () => {
   } else if (active === 'a') {
     aNum = aNum.slice(0, -1);
     display.textContent = display.textContent.slice(0, -1);
+    if (display.textContent === '') display.textContent = '0';
   }
 });
 
