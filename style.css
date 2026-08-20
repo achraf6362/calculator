@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
 html {
   box-sizing: border-box;
 }
@@ -9,50 +11,80 @@ html {
 }
 
 body {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 32px;
+  font-family: "Roboto Mono", monospace;
 }
 
 section {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100vh;
 }
 
 #calc {
-  padding: 20px;
+  padding: 16px;
   border: 2px solid black;
   border-radius: 4px;
-  width: 600px;
+
 }
 
 #display {
-  padding: 32px 20px;
-  text-align: right;
+  padding: 8px;
   border: 2px solid black;
   border-radius: 4px;
-}
-
-button {
-  font-family: inherit;
-  font-size: inherit;
-/*   height: 80px;
-  width: 80px; */
-  padding: 8px;
-
+  font-size: 32px;
+  text-align: right;
 }
 
 .buttons {
   display: flex;
-  
+  margin-top: 16px;
 }
 
 .numbers {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.wide {
+  grid-column: span 2;
 }
 
 .right {
   display: flex;
+  margin-left: 8px;
+  gap: 8px;
+}
+
+.operators {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  button {
+    background-color: rgb(255, 211, 67);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  button {
+    background-color: rgb(231, 231, 231);
+  }
+}
+
+button {
+  font-family: inherit;
+  font-size: 32px;
+  padding: 16px 32px;
+  border: 1px solid black;
+  border-radius: 4px;
+  color: black;
+  background-color: white;
 }
