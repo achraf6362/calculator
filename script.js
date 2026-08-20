@@ -75,11 +75,12 @@ numbers.forEach(number => {
 
 operators.forEach(operator => {
   operator.addEventListener('click', (e) => {
-    if (aNum === 'Error') return;
-
     isNewCalc = false;
     lastBNum = '';
     LastO = '';
+    
+    if (aNum === 'Error') return;
+
 
     if (isANumActive && isOActive && aNum === '') {
       aNum = '0';
