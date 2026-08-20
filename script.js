@@ -35,6 +35,8 @@ numbers.forEach(number => {
       bNum = '';
       isANumActive = true;
       isNewCalc = false;
+      lastBNum = '';
+      LastO = '';
     }
 
     if (isANumActive) {
@@ -76,27 +78,35 @@ operators.forEach(operator => {
     if (aNum === 'Error') return;
 
     isNewCalc = false;
+    lastBNum = '';
+    LastO = '';
 
     if (isANumActive && isOActive && aNum === '') {
       aNum = '0';
       isANumActive = false;
       o = e.target.value;
       display.textContent += e.target.textContent;
-    } else if (isANumActive && isOActive) {
-        isANumActive = false;
-        o = e.target.value;
+    }
+    
+    else if (isANumActive && isOActive) {
+      isANumActive = false;
+      o = e.target.value;
         display.textContent += e.target.textContent;
-    } else if (!isANumActive && o !== '' && isOActive) {
-        display.textContent = display.textContent.slice(0, -1) + e.target.textContent;
-        o = e.target.value;
-    } else if (!isANumActive && bNum !== '') {
-        let result = Math.round(operate(+aNum, +bNum, o) * 10000000000) / 10000000000;
-        if (!isFinite(result)) result = 'Error';
-        o = e.target.value;
-        display.textContent = result + e.target.textContent;
-        aNum = String(result);
-        bNum = '';
-        isOActive = true;
+    }
+    
+    else if (!isANumActive && o !== '' && isOActive) {
+      display.textContent = display.textContent.slice(0, -1) + e.target.textContent;
+      o = e.target.value;
+    }
+    
+    else if (!isANumActive && bNum !== '') {
+      let result = Math.round(operate(+aNum, +bNum, o) * 10000000000) / 10000000000;
+      if (!isFinite(result)) result = 'Error';
+      o = e.target.value;
+      display.textContent = result + e.target.textContent;
+      aNum = String(result);
+      bNum = '';
+      isOActive = true;
     }
   });
 });
@@ -134,19 +144,26 @@ clear.addEventListener('click', () => {
   o = '';
   isOActive = true;
   isNewCalc = true;
+  lastBNum = '';
+  LastO = '';
 });
 
 del.addEventListener('click', () => {
+  if (isNewCalc || aNum === 'Error') return;
 
   if (bNum !== '') {
     bNum = bNum.slice(0, -1);
     display.textContent = display.textContent.slice(0, -1);
-  } else if (o !== '') {
+  }
+  
+  else if (o !== '') {
     o = '';
     isANumActive = true;
     isOActive = true;
     display.textContent = display.textContent.slice(0, -1);
-  } else if (isANumActive) {
+  }
+  
+  else if (isANumActive) {
     aNum = aNum.slice(0, -1);
     display.textContent = display.textContent.slice(0, -1);
     if (display.textContent === '') display.textContent = '0';
@@ -172,7 +189,9 @@ pn.addEventListener('click', () => {
   if (isANumActive) {
     aNum = aNum.startsWith('-') ? aNum.slice(1) : '-' + aNum;
     display.textContent = aNum;
-  } else if (!isANumActive && bNum !== '') {
+  }
+  
+  else if (!isANumActive && bNum !== '') {
     bNum = bNum.startsWith('-') ? bNum.slice(1) : '-' + bNum;
     display.textContent = aNum + o + bNum;
   }
