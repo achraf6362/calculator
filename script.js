@@ -90,7 +90,7 @@ operators.forEach(operator => {
         display.textContent = display.textContent.slice(0, -1) + e.target.textContent;
         o = e.target.value;
     } else if (active === 'b' && bNum !== '') {
-        let result = Math.round(operate(+aNum, +bNum, o) * 100000000000) / 100000000000;
+        let result = Math.round(operate(+aNum, +bNum, o) * 10000000000) / 10000000000;
         if (!isFinite(result)) result = 'Error';
         o = e.target.value;
         display.textContent = result + e.target.textContent;
@@ -104,7 +104,7 @@ operators.forEach(operator => {
 equal.addEventListener('click', () => {
 
   if (bNum !== '') {
-    let result = Math.round(operate(+aNum, +bNum, o) * 100000000000) / 100000000000;
+    let result = Math.round(operate(+aNum, +bNum, o) * 10000000000) / 10000000000;
     if (!isFinite(result)) result = 'Error';
     display.textContent = result;
     aNum = String(result);
@@ -118,7 +118,7 @@ equal.addEventListener('click', () => {
   }
 
   else if (lastBNum !== '' && LastO !== '' && aNum !== '' && aNum !== 'Error') {
-    let result = Math.round(operate(+aNum, +lastBNum, LastO) * 100000000000) / 100000000000;
+    let result = Math.round(operate(+aNum, +lastBNum, LastO) * 10000000000) / 10000000000;
     if (!isFinite(result)) result = 'Error';
     display.textContent = result;
     aNum = String(result);
