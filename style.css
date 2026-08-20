@@ -60,8 +60,11 @@ section {
 }
 
 .operators {
-  display: flex;
   flex-direction: column;
+}
+
+.operators, .actions {
+  display: flex;
   gap: 8px;
 
   button {
@@ -74,17 +77,7 @@ section {
 }
 
 .actions {
-  display: flex;
-  gap: 8px;
   margin-bottom: 8px;
-
-  button {
-    background-color: rgb(231, 231, 231);
-
-    &:hover {
-      background-color: rgb(224, 224, 224);
-    }
-  }
 }
 
 #clear {
