@@ -39,6 +39,9 @@ numbers.forEach(number => {
       LastO = '';
     }
 
+    if (isANumActive && aNum.length >= 16) return;
+    if (!isANumActive && bNum.length >= 16) return;
+    
     if (isANumActive) {
       isNewCalc = false;
 
@@ -70,6 +73,8 @@ numbers.forEach(number => {
         display.textContent += e.target.value;
         isOActive = false;
     }
+
+    displaySize()
   });
 });
 
@@ -80,7 +85,6 @@ operators.forEach(operator => {
     LastO = '';
     
     if (aNum === 'Error') return;
-
 
     if (isANumActive && isOActive && aNum === '') {
       aNum = '0';
@@ -109,11 +113,12 @@ operators.forEach(operator => {
       bNum = '';
       isOActive = true;
     }
+
+    displaySize()
   });
 });
 
 equal.addEventListener('click', () => {
-
   if (bNum !== '') {
     let result = Math.round(operate(+aNum, +bNum, o) * 10000000000) / 10000000000;
     if (!isFinite(result)) result = 'Error';
@@ -135,6 +140,8 @@ equal.addEventListener('click', () => {
     aNum = String(result);
     isNewCalc = true;
   }
+
+  displaySize()
 });
 
 clear.addEventListener('click', () => {
@@ -147,6 +154,8 @@ clear.addEventListener('click', () => {
   isNewCalc = true;
   lastBNum = '';
   LastO = '';
+
+  displaySize()
 });
 
 del.addEventListener('click', () => {
@@ -169,6 +178,8 @@ del.addEventListener('click', () => {
     display.textContent = display.textContent.slice(0, -1);
     if (display.textContent === '') display.textContent = '0';
   }
+
+  displaySize()
 });
 
 window.addEventListener('keydown', (e) => {
@@ -196,6 +207,8 @@ pn.addEventListener('click', () => {
     bNum = bNum.startsWith('-') ? bNum.slice(1) : '-' + bNum;
     display.textContent = aNum + o + bNum;
   }
+
+  displaySize()
 });
 
 document.querySelectorAll('button').forEach(button => {
@@ -203,3 +216,13 @@ document.querySelectorAll('button').forEach(button => {
     button.blur();
   })
 });
+
+function displaySize() {
+  if (display.textContent.length >= 23) {
+    display.style.fontSize = '16px';
+  } else if (display.textContent.length >= 17) {
+    display.style.fontSize = '24px';
+  } else {
+    display.style.fontSize = '32px';
+  }
+}

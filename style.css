@@ -31,6 +31,10 @@ section {
 }
 
 #display {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 64px;
   padding: 8px;
   border: 2px solid black;
   border-radius: 4px;
